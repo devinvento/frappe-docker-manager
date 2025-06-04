@@ -119,11 +119,6 @@ services:
       - frappe_network
     depends_on:
       - websocket
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`${FRAPPE_SITE_NAME_HEADER}`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
     deploy:
       restart_policy:
         condition: on-failure
@@ -249,24 +244,6 @@ services:
       - logs:/home/frappe/frappe-bench/logs
     container_name: ${FRAPPE_SITE_NAME_HEADER}-websocket # Dynamically set container name
 
-  traefik:
-    image: traefik:v2.10
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=your-email@example.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./letsencrypt:/letsencrypt
-    networks:
-      - frappe_network
 
 volumes:
   db-data:

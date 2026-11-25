@@ -5,3 +5,8 @@ demo*
 .env
 bin
 web-manager/web-docker-manager-env/lib/*
+# Generated admin login: never commit
+.admin_credentials
+**/.admin_credentials
+.env
+**/.env
